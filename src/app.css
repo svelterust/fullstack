@@ -1,0 +1,4 @@
+@import "tailwindcss";
+@plugin "daisyui";
+@plugin "@egoist/tailwindcss-icons";
+@config "../tailwind.config.ts";
