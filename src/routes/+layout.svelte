@@ -5,4 +5,6 @@
   const { children } = $props();
 </script>
 
-{@render children()}
+<div class="container mx-auto">
+  {@render children()}
+</div>
