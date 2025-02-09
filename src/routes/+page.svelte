@@ -1,15 +1,24 @@
 <script lang="ts">
     import client from "$lib/client";
 
-    async function login() {
-        const { data } = await client.login.post({
-            username: "Hey there",
-            password: "arsarstarts",
-        });
-        console.log(data);
+    // Messages
+    let messages = $state([]);
+    async function getMessages() {
+        messages = [];
+        const { data } = await client.messages.get();
+        for await (const { index } of data) {
+            messages.push(index);
+        }
     }
 </script>
 
 <h1>Business</h1>
-<p>Welcome to my business!</p>
-<button onclick={login}>Login</button>
+<button onclick={getMessages}>Get messages</button>
+
+{#if messages.length > 0}
+    <ul>
+        {#each messages as message}
+            <li>{message}</li>
+        {/each}
+    </ul>
+{/if}

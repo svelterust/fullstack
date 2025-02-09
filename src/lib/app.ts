@@ -2,30 +2,26 @@ import { Elysia, t } from "elysia";
 import { cors } from "@elysiajs/cors";
 import { swagger } from "@elysiajs/swagger";
 
-export const app = new Elysia({ prefix: "/api" })
-  .use(cors())
-  .use(
-    swagger({
-      path: "/",
-    }),
-  )
-  .post("/login", ({ body }) => body, {
-    body: t.Object(
-      {
-        username: t.String(),
-        password: t.String({
-          minLength: 8,
-          description: "User password (at least 8 characters)",
-        }),
+// Basic setup
+const elysia = new Elysia({ prefix: "/api" }).use(cors()).use(
+  swagger({
+    path: "/",
+    scalarConfig: {
+      spec: {
+        url: "/api/json",
       },
-      {
-        description: "Expected an username and password",
-      },
-    ),
-    response: t.Object({
-      username: t.String(),
-      password: t.String(),
-    }),
-  });
+    },
+    exclude: ["/api/", "/api/json"],
+  }),
+);
+
+// Business logic
+export const app = elysia.get("/messages", async function* () {
+  let index = 1;
+  while (index <= 10) {
+    yield JSON.stringify({ index: index++ });
+    await new Promise((resolve) => setTimeout(resolve, 100));
+  }
+});
 
 export type App = typeof app;

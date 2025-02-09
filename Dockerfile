@@ -7,7 +7,7 @@ ENV BODY_SIZE_LIMIT=25M
 
 # Install dependencies
 COPY package.json bun.lockb ./
-RUN bun install --production
+RUN bun install --freeze
 
 # Build application
 COPY . .
